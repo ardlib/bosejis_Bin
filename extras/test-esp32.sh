@@ -39,7 +39,7 @@ set -e
 
 arduino-cli cache clean
 # Compile for ESP32 (DOIT DEV KIT V1)
-arduino-cli compile --fqbn esp32:esp32:esp32doit-devkit-v1 examples/basic_use
+arduino-cli compile -v --fqbn esp32:esp32:esp32doit-devkit-v1 examples/basic_use
 # Flashing
 arduino-cli upload -p /dev/ttyUSB0 -v --fqbn esp32:esp32:esp32doit-devkit-v1 \
     examples/basic_use

@@ -50,7 +50,17 @@
 #include <stdarg.h>
 #include <stddef.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+
+/* Compatibility for dtostrf */
+#if defined(ARDUINO_ARCH_ESP32)
+#include <stdlib_noniso.h>
+#elif defined(__AVR__)
+// STDLIB is already included
+#else
+#include <avr/dtostrf.h>
+#endif
 
 class Bin {
 private:
@@ -73,7 +83,9 @@ public:
 
   // gives access to the internal string
   inline operator uint8_t *() { return _buf; }
+  inline operator char *() { return (char *)_buf; }
   inline uint8_t *Bytes() { return _buf; }
+  inline const char *c_str() { return (const char *)_buf; }
 
   // Clean up the Buffer and Reset it for re-use
   void flush();
@@ -114,6 +126,14 @@ public:
   // Safe access to sprintf-like formatting,
   // e.g. str.format("Hi, my name is %s and I'm %d years old", name, age);
   size_t sprintf(const char *str, ...);
+
+  // Friendly use of dtostrf
+  // dtostrf (double __val, signed char __width,
+  //          unsigned char __prec, char *__s)
+
+  size_t strfloat(float b, int8_t min_width, uint8_t num_digits_after_decimal);
+  size_t strdouble(double b, int8_t min_width,
+                   uint8_t num_digits_after_decimal);
 };
 
 #endif /* bosejis_Bin_h */

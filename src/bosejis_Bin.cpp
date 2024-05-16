@@ -160,3 +160,22 @@ size_t Bin::sprintf(const char *str, ...) {
   }
   return ret;
 }
+
+size_t Bin::strfloat(float b, int8_t min_width,
+                     uint8_t num_digits_after_decimal) {
+  return strdouble((double)b, min_width, num_digits_after_decimal);
+}
+
+size_t Bin::strdouble(double b, int8_t min_width,
+                      uint8_t num_digits_after_decimal) {
+  char buf[min_width + 4];
+  if (dtostrf(b, min_width, num_digits_after_decimal, buf) != buf)
+    return 0;
+  size_t sz = strlen(buf);
+  if ((_cur + sz) < (_buf + _size)) {
+    memcpy(_cur, buf, sz);
+    _cur += sz;
+    return sz;
+  }
+  return 0;
+}

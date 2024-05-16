@@ -39,7 +39,7 @@ set -e
 
 arduino-cli cache clean
 # Compile for Arduino Uno
-arduino-cli compile --fqbn arduino:avr:uno examples/basic_use
+arduino-cli compile -v --fqbn arduino:avr:uno examples/basic_use
 # Flashing
 arduino-cli upload -p /dev/ttyUSB0 -v --fqbn arduino:avr:uno \
     examples/basic_use

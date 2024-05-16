@@ -49,6 +49,9 @@ PString str(raw_str, STR_BUF);
 
 // Functions
 void Test_Basic();
+void Test_Operator();
+void Test_Sprintf();
+void Test_fdprint();
 
 void setup() {
   Serial.begin(115200);
@@ -60,6 +63,12 @@ void setup() {
 void loop() {
   Test_Basic();
   delay(2000);
+  Test_Operator();
+  delay(2000);
+  Test_Sprintf();
+  delay(2000);
+  Test_fdprint();
+  delay(2000);
 }
 
 #define PrintBin(b)                                                            \
@@ -68,6 +77,12 @@ void loop() {
   str.HexBuffer(b.Bytes(), b.length());                                        \
   Serial.println(str);                                                         \
   b.flush()
+
+#define PrintBinNoFlush(b)                                                     \
+  str.begin();                                                                 \
+  str.format(" len: %-2d cap: %-2d Buffer: ", b.length(), b.capacity());       \
+  str.HexBuffer(b.Bytes(), b.length());                                        \
+  Serial.println(str)
 
 #define PrintValue(PRINT, VAL)                                                 \
   str.begin();                                                                 \
@@ -118,17 +133,18 @@ void Test_Basic() {
     return;
   PrintBin(b);
 
-  PrintValueLarge("\n int64_t ", (int64_t)-1234567890123456789);
+  PrintValueLarge("\n int64_t (-1234567890123456789) ",
+                  (int64_t)-1234567890123456789);
   if (!b.write((int64_t)-1234567890123456789))
     return;
   PrintBin(b);
 
-  PrintValueLarge("\n float ", (float)3.14159);
+  PrintValueLarge("\n float (3.14159) ", (float)3.14159);
   if (!b.write((float)3.14159))
     return;
   PrintBin(b);
 
-  PrintValueLarge("\n double ", (double)3.14159265358979);
+  PrintValueLarge("\n double (3.14159265358979) ", (double)3.14159265358979);
   if (!b.write((double)3.14159265358979))
     return;
   PrintBin(b);
@@ -152,5 +168,72 @@ void Test_Basic() {
   PrintValueString("\n F(String) ", "Hare Krishna!");
   if (!b.write(F("Hare Krishna!")))
     return;
+  PrintBin(b);
+}
+
+void Test_Operator() {
+#define BUF_TEST_OPR 50
+  uint8_t raw[BUF_TEST_OPR];
+  Bin b(raw, BUF_TEST_OPR);
+
+  SEPARATOR("Operator Features of Bin Class");
+  Serial.println(F("\n Initial Buffer:"));
+  PrintBin(b);
+
+  PrintValue("\n = uint16_t ", (uint16_t)0x1234);
+  b = (uint16_t)0x1234;
+  PrintBin(b);
+
+  PrintValue("\n = int32_t ", (int32_t)-1234567890);
+  b = (int32_t)-1234567890;
+  PrintBinNoFlush(b);
+
+  PrintValueString("\n += F(String) ", "Hare Krishna!");
+  b += F("Hare Krishna!");
+  PrintBin(b);
+}
+
+void Test_Sprintf() {
+#define BUF_TEST_SPF 50
+  uint8_t raw[BUF_TEST_SPF];
+  Bin b(raw, BUF_TEST_SPF);
+
+  SEPARATOR("Sprintf Features of Bin Class");
+  Serial.println(F("\n Initial Buffer:"));
+  PrintBin(b);
+
+  PrintValue("\n sprintf with '-6d' on uint16_t ", (uint16_t)0x1234);
+  if (!b.sprintf("'%-6d'", (uint16_t)0x1234))
+    return;
+  PrintBinNoFlush(b);
+  b.write('\0');
+  Serial.println(F("Raw Buffer as String:"));
+  Serial.println(b);
+  Serial.println();
+}
+
+void Test_fdprint() {
+#define BUF_TEST_FD 50
+  uint8_t raw[BUF_TEST_FD];
+  Bin b(raw, BUF_TEST_FD);
+
+  SEPARATOR("Float and Double Print Features of Bin Class");
+  Serial.println(F("\n Initial Buffer:"));
+  PrintBin(b);
+
+  PrintValueLarge("\n float (3.14159)", (float)3.14159);
+  if (!b.strfloat(3.14159, 7, 5))
+    return;
+  b.write('\0');
+  Serial.println(F("Raw Buffer as String:"));
+  Serial.println(b);
+  PrintBin(b);
+
+  PrintValueLarge("\n double (3.14159265358979)", (double)3.14159265358979);
+  if (!b.strdouble(3.14159265358979, 17, 14))
+    return;
+  b.write('\0');
+  Serial.println(F("Raw Buffer as String:"));
+  Serial.println(b);
   PrintBin(b);
 }
