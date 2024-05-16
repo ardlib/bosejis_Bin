@@ -95,9 +95,21 @@ public:
   size_t write(const char *b, bool withTermination = false);
   size_t write(const String &s, bool withTermination = false);
   size_t write(const __FlashStringHelper *ifsh, bool withTermination = false);
-  /*
-  size_t write(struct tm * timeinfo, const char * format = NULL);
-  */
+
+  // This function allows assignment to an arbitrary scalar value like
+  //    str = myfloat;
+  template <class T> inline Bin &operator=(T arg) {
+    begin();
+    write(arg);
+    return *this;
+  }
+
+  // Concatenation of any type data
+  //    str += myfloat;
+  template <class T> inline Bin &operator+=(T arg) {
+    write(arg);
+    return *this;
+  }
 };
 
 #endif /* bosejis_Bin_h */
