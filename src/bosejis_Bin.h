@@ -83,6 +83,7 @@ public:
   size_t write(uint8_t);
   size_t write(char);
   size_t write(int8_t);
+  size_t write(bool);
   size_t write(uint16_t);
   size_t write(int16_t);
   size_t write(uint32_t);

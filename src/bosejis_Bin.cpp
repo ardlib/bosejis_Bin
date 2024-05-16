@@ -56,6 +56,8 @@ size_t Bin::write(char b) { return write((uint8_t)b); }
 
 size_t Bin::write(int8_t b) { return write((uint8_t)b); }
 
+size_t Bin::write(bool b) { return write((uint8_t)b); }
+
 size_t Bin::write(uint16_t b) {
   if ((_cur + sizeof(b)) < (_buf + _size)) {
     memcpy(_cur, &b, sizeof(b));
