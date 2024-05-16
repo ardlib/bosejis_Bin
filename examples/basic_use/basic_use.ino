@@ -107,10 +107,10 @@ void loop() {
   str.HexBuffer(VAL, strlen(VAL));                                             \
   Serial.println(str)
 
-#define PrintBinAsString(b) \
-  PrintBinNoFlush(b); \
-  Serial.println(F("Raw Buffer as String:")); \
-  Serial.println(b); \
+#define PrintBinAsString(b)                                                    \
+  PrintBinNoFlush(b);                                                          \
+  Serial.print(F(" Raw Buffer as String:\n "));                                \
+  Serial.println(b);                                                           \
   b.flush()
 
 void Test_Basic() {
@@ -227,7 +227,7 @@ void Test_fdprint() {
   if (!b.strfloat(3.14159, 7, 5))
     return;
   PrintBinAsString(b);
-  
+
   PrintValueLarge("\n double (3.14159265358979)", (double)3.14159265358979);
   if (!b.strdouble(3.14159265358979, 17, 14))
     return;
