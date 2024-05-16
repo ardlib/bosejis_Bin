@@ -106,3 +106,43 @@ size_t Bin::write(double b) {
   }
   return 0;
 }
+
+size_t Bin::write(const char *b, bool withTermination) {
+  if ((_cur + strlen(b)) < (_buf + _size)) {
+    memcpy(_cur, b, strlen(b));
+    _cur += strlen(b);
+    if (withTermination) {
+      *_cur = '\0';
+      _cur += 1; // For the Null Character
+    }
+    return length();
+  }
+  return 0;
+}
+
+size_t Bin::write(const String &s, bool withTermination) {
+  return write(s.c_str(), withTermination);
+}
+
+size_t Bin::write(const __FlashStringHelper *ifsh, bool withTermination) {
+#if defined(__AVR__)
+  PGM_P p = reinterpret_cast<PGM_P>(ifsh);
+  size_t n = 0;
+  while (1) {
+    unsigned char c = pgm_read_byte(p++);
+    if (c == 0)
+      break;
+    if (write(c))
+      n++;
+    else
+      break;
+  }
+  if (withTermination && n > 0) {
+    write('\0');
+    ++n;
+  }
+  return n;
+#else
+  return write(reinterpret_cast<const char *>(ifsh), withTermination);
+#endif
+}

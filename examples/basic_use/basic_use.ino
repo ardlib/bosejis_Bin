@@ -84,6 +84,15 @@ void loop() {
   str.Hex(VAL);                                                                \
   Serial.println(str)
 
+#define PrintValueString(PRINT, VAL)                                           \
+  str.begin();                                                                 \
+  str.print(F(PRINT));                                                         \
+  str.print(F("\'"));                                                          \
+  str.print(VAL);                                                              \
+  str.print(F("\' = 0x"));                                                     \
+  str.HexBuffer(VAL, strlen(VAL));                                             \
+  Serial.println(str)
+
 void Test_Basic() {
 #define BUF_TEST_BASIC 50
   uint8_t raw[BUF_TEST_BASIC];
@@ -121,6 +130,27 @@ void Test_Basic() {
 
   PrintValueLarge("\n double ", (double)3.14159265358979);
   if (!b.write((double)3.14159265358979))
+    return;
+  PrintBin(b);
+
+  PrintValue("\n bool ", true);
+  if (!b.write(true))
+    return;
+  PrintBin(b);
+
+  PrintValueString("\n const char* ", "Hari Aum!");
+  if (!b.write("Hari Aum!"))
+    return;
+  PrintBin(b);
+
+  String s = "Aum Namh Shivay!";
+  PrintValueString("\n String ", s.c_str());
+  if (!b.write(s))
+    return;
+  PrintBin(b);
+
+  PrintValueString("\n F(String) ", "Hare Krishna!");
+  if (!b.write(F("Hare Krishna!")))
     return;
   PrintBin(b);
 }

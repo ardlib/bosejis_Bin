@@ -37,6 +37,7 @@
 #ifndef bosejis_Bin_h
 #define bosejis_Bin_h
 
+#include <WString.h>
 #if defined(__AVR__) || defined(ARDUINO_ARCH_SAMD) ||                          \
     defined(ARDUINO_ARCH_RP2040)
 #include <inttypes.h>
@@ -78,6 +79,7 @@ public:
   void flush();
 
   // Binary Writer Functions
+
   size_t write(uint8_t);
   size_t write(char);
   size_t write(int8_t);
@@ -89,10 +91,10 @@ public:
   size_t write(int64_t);
   size_t write(float);
   size_t write(double);
+  size_t write(const char *b, bool withTermination = false);
+  size_t write(const String &s, bool withTermination = false);
+  size_t write(const __FlashStringHelper *ifsh, bool withTermination = false);
   /*
-  size_t write(const __FlashStringHelper *ifsh);
-  size_t write(const String &);
-  size_t write(const char[]);
   size_t write(struct tm * timeinfo, const char * format = NULL);
   */
 };
