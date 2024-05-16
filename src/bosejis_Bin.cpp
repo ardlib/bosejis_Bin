@@ -148,3 +148,15 @@ size_t Bin::write(const __FlashStringHelper *ifsh, bool withTermination) {
   return write(reinterpret_cast<const char *>(ifsh), withTermination);
 #endif
 }
+
+size_t Bin::sprintf(const char *str, ...) {
+  va_list argptr;
+  va_start(argptr, str);
+  int ret = vsnprintf((char *)_cur, _size - (_cur - _buf), str, argptr);
+  if (ret) {
+    while (*_cur != '\0') {
+      ++_cur;
+    }
+  }
+  return ret;
+}

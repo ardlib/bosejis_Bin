@@ -34,6 +34,22 @@ If you want to contribute to this project:
 
 Please read [CONTRIBUTING.md](https://github.com/ardlib/bosejis_Bin/blob/master/CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
 
+### `arduino-cli` Usage Details
+
+```sh
+# Compile for ESP32 (DOIT DEV KIT V1)
+arduino-cli compile --fqbn esp32:esp32:esp32doit-devkit-v1 examples/basic_use
+# Flashing
+arduino-cli upload -p /dev/ttyUSB0 -v --fqbn esp32:esp32:esp32doit-devkit-v1 \
+    examples/basic_use
+
+# Compile for Arduino Uno
+arduino-cli compile --fqbn arduino:avr:uno examples/basic_use
+# Flashing
+arduino-cli upload -p /dev/ttyUSB0 -v --fqbn arduino:avr:uno \
+    examples/basic_use
+```
+
 ## License
 
 `SPDX: GPL-3.0-or-later`

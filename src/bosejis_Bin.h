@@ -110,6 +110,10 @@ public:
     write(arg);
     return *this;
   }
+
+  // Safe access to sprintf-like formatting,
+  // e.g. str.format("Hi, my name is %s and I'm %d years old", name, age);
+  size_t sprintf(const char *str, ...);
 };
 
 #endif /* bosejis_Bin_h */
