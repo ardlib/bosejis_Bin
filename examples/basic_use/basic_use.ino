@@ -89,7 +89,7 @@ void Test_Basic() {
   uint8_t raw[BUF_TEST_BASIC];
   Bin b(raw, BUF_TEST_BASIC);
 
-  SEPARATOR("Basic Features of BinBuffer");
+  SEPARATOR("Basic Features of Bin Class");
 
   Serial.println(F("\n Initial Buffer:"));
   PrintBin(b);
