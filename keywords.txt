@@ -1,0 +1,19 @@
+# Boseji's Bin Library
+
+# Primary Header and Classes (KEYWORD1)
+bosejis_Bin	KEYWORD1
+bosejis_Bin.h	KEYWORD1
+Bin	KEYWORD1
+
+# Instances, Methods and Functions (KEYWORD2)
+begin	KEYWORD2
+capacity	KEYWORD2
+length	KEYWORD2
+
+# Structures, Pre-Processor and Other Functions (KEYWORD3)
+
+# Constants (LITERAL1)
+
+# Other Parts (LITERAL2)
+
+
