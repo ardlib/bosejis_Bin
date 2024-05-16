@@ -10,6 +10,16 @@ begin	KEYWORD2
 capacity	KEYWORD2
 length	KEYWORD2
 write	KEYWORD2
+Bytes	KEYWORD2
+c_str	KEYWORD2
+flush	KEYWORD2
+sprintf	KEYWORD2
+strfloat	KEYWORD2
+strdouble	KEYWORD2
+tostr	KEYWORD2
+Hex	KEYWORD2
+HexBuffer	KEYWORD2
+HexArray	KEYWORD2
 
 # Structures, Pre-Processor and Other Functions (KEYWORD3)
 

@@ -19,12 +19,7 @@
       "docs"
     ]
   },
-  "dependencies": [
-    {
-      "name": "boseji_PString",
-      "version": ">0.0.0"
-    }
-  ],
+  "dependencies": [],
   "frameworks": "*",
   "platforms": "*",
   "examples": "examples/*/*/*.ino"

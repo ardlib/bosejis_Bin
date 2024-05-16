@@ -179,3 +179,78 @@ size_t Bin::strdouble(double b, int8_t min_width,
   }
   return 0;
 }
+
+size_t Bin::tostr() { return write('\0'); }
+
+size_t Bin::Hex(uint8_t data) {
+  static const char map[] = {"0123456789abcdef"};
+  size_t ret = 0;
+  ret = write(map[(uint8_t)((data & 0xF0) >> 4)]);
+  ret += write(map[(uint8_t)(data & 0x0F)]);
+  return ret;
+}
+
+size_t Bin::Hex(char data) { return Hex((uint8_t)data); }
+
+size_t Bin::Hex(uint16_t data) {
+#define U16_ARRAY_SIZE (sizeof(uint16_t))
+  uint8_t byteArray[U16_ARRAY_SIZE];
+  memcpy(byteArray, &data, U16_ARRAY_SIZE);
+  size_t ret = 0;
+  for (int32_t i = U16_ARRAY_SIZE - 1; i > -1; i--) {
+    ret += Hex(byteArray[i]);
+  }
+  return ret;
+}
+
+size_t Bin::Hex(int16_t data) { return Hex((uint16_t)data); }
+
+size_t Bin::Hex(uint32_t data) {
+#define U32_ARRAY_SIZE (sizeof(uint32_t))
+  uint8_t byteArray[U32_ARRAY_SIZE];
+  memcpy(byteArray, &data, U32_ARRAY_SIZE);
+  size_t ret = 0;
+  for (int32_t i = U32_ARRAY_SIZE - 1; i > -1; i--) {
+    ret += Hex(byteArray[i]);
+  }
+  return ret;
+}
+
+size_t Bin::Hex(int32_t data) { return Hex((uint32_t)data); }
+
+size_t Bin::Hex(uint64_t data) {
+#define U64_ARRAY_SIZE (sizeof(uint64_t))
+  uint8_t byteArray[U64_ARRAY_SIZE];
+  memcpy(byteArray, &data, U64_ARRAY_SIZE);
+  size_t ret = 0;
+  for (int32_t i = U64_ARRAY_SIZE - 1; i > -1; i--) {
+    ret += Hex(byteArray[i]);
+  }
+  return ret;
+}
+
+size_t Bin::Hex(int64_t data) { return Hex((uint64_t)data); }
+
+size_t Bin::Hex(bool data) { return Hex((uint8_t)data); }
+
+size_t Bin::Hex(float data) {
+#define FLOAT_ARRAY_SIZE (sizeof(float))
+  uint8_t byteArray[FLOAT_ARRAY_SIZE];
+  memcpy(byteArray, &data, FLOAT_ARRAY_SIZE);
+  size_t ret = 0;
+  for (int32_t i = FLOAT_ARRAY_SIZE - 1; i > -1; i--) {
+    ret += Hex(byteArray[i]);
+  }
+  return ret;
+}
+
+size_t Bin::Hex(double data) {
+#define DOUBLE_ARRAY_SIZE (sizeof(double))
+  uint8_t byteArray[DOUBLE_ARRAY_SIZE];
+  memcpy(byteArray, &data, DOUBLE_ARRAY_SIZE);
+  size_t ret = 0;
+  for (int32_t i = DOUBLE_ARRAY_SIZE - 1; i > -1; i--) {
+    ret += Hex(byteArray[i]);
+  }
+  return ret;
+}

@@ -1,5 +1,5 @@
 /**
- * Advance Usage Example.
+ * Basic Usage Example.
  *
  * बोसजी की द्विवर्ण आधारित लाइब्रेरी
  * ===============================
@@ -35,7 +35,6 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include <bosejis_Bin.h>
-#include <bosejis_PString.h>
 
 // Defines
 #define SEPARATOR(X)                                                           \
@@ -45,7 +44,7 @@
 // Globals
 #define STR_BUF 200
 char raw_str[STR_BUF];
-PString str(raw_str, STR_BUF);
+Bin str(raw_str, STR_BUF);
 
 // Functions
 void Test_Basic();
@@ -73,40 +72,46 @@ void loop() {
 
 #define PrintBin(b)                                                            \
   str.begin();                                                                 \
-  str.format(" len: %-2d cap: %-2d Buffer: ", b.length(), b.capacity());       \
+  str.sprintf(" len: %-2d cap: %-2d Buffer: ", b.length(), b.capacity());      \
   str.HexBuffer(b.Bytes(), b.length());                                        \
   Serial.println(str);                                                         \
   b.flush()
 
 #define PrintBinNoFlush(b)                                                     \
   str.begin();                                                                 \
-  str.format(" len: %-2d cap: %-2d Buffer: ", b.length(), b.capacity());       \
+  str.sprintf(" len: %-2d cap: %-2d Buffer: ", b.length(), b.capacity());      \
   str.HexBuffer(b.Bytes(), b.length());                                        \
   Serial.println(str)
 
 #define PrintValue(PRINT, VAL)                                                 \
   str.begin();                                                                 \
-  str.print(F(PRINT));                                                         \
-  str.print(VAL);                                                              \
-  str.print(F(" = 0x"));                                                       \
+  str.write(F(PRINT));                                                         \
+  str.sprintf("%d", VAL);                                                      \
+  str.write(F(" = 0x"));                                                       \
   str.Hex(VAL);                                                                \
   Serial.println(str)
 
 #define PrintValueLarge(PRINT, VAL)                                            \
   str.begin();                                                                 \
-  str.print(F(PRINT));                                                         \
-  str.print(F(" 0x"));                                                         \
+  str.write(F(PRINT));                                                         \
+  str.write(F(" 0x"));                                                         \
   str.Hex(VAL);                                                                \
   Serial.println(str)
 
 #define PrintValueString(PRINT, VAL)                                           \
   str.begin();                                                                 \
-  str.print(F(PRINT));                                                         \
-  str.print(F("\'"));                                                          \
-  str.print(VAL);                                                              \
-  str.print(F("\' = 0x"));                                                     \
+  str.write(F(PRINT));                                                         \
+  str.write(F("\'"));                                                          \
+  str.write(VAL);                                                              \
+  str.write(F("\' = 0x"));                                                     \
   str.HexBuffer(VAL, strlen(VAL));                                             \
   Serial.println(str)
+
+#define PrintBinAsString(b) \
+  PrintBinNoFlush(b); \
+  Serial.println(F("Raw Buffer as String:")); \
+  Serial.println(b); \
+  b.flush()
 
 void Test_Basic() {
 #define BUF_TEST_BASIC 50
@@ -157,18 +162,18 @@ void Test_Basic() {
   PrintValueString("\n const char* ", "Hari Aum!");
   if (!b.write("Hari Aum!"))
     return;
-  PrintBin(b);
+  PrintBinAsString(b);
 
   String s = "Aum Namh Shivay!";
   PrintValueString("\n String ", s.c_str());
   if (!b.write(s))
     return;
-  PrintBin(b);
+  PrintBinAsString(b);
 
   PrintValueString("\n F(String) ", "Hare Krishna!");
   if (!b.write(F("Hare Krishna!")))
     return;
-  PrintBin(b);
+  PrintBinAsString(b);
 }
 
 void Test_Operator() {
@@ -205,10 +210,7 @@ void Test_Sprintf() {
   PrintValue("\n sprintf with '-6d' on uint16_t ", (uint16_t)0x1234);
   if (!b.sprintf("'%-6d'", (uint16_t)0x1234))
     return;
-  PrintBinNoFlush(b);
-  b.write('\0');
-  Serial.println(F("Raw Buffer as String:"));
-  Serial.println(b);
+  PrintBinAsString(b);
   Serial.println();
 }
 
@@ -224,16 +226,10 @@ void Test_fdprint() {
   PrintValueLarge("\n float (3.14159)", (float)3.14159);
   if (!b.strfloat(3.14159, 7, 5))
     return;
-  b.write('\0');
-  Serial.println(F("Raw Buffer as String:"));
-  Serial.println(b);
-  PrintBin(b);
-
+  PrintBinAsString(b);
+  
   PrintValueLarge("\n double (3.14159265358979)", (double)3.14159265358979);
   if (!b.strdouble(3.14159265358979, 17, 14))
     return;
-  b.write('\0');
-  Serial.println(F("Raw Buffer as String:"));
-  Serial.println(b);
-  PrintBin(b);
+  PrintBinAsString(b);
 }

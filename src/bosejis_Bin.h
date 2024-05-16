@@ -83,9 +83,17 @@ public:
 
   // gives access to the internal string
   inline operator uint8_t *() { return _buf; }
-  inline operator char *() { return (char *)_buf; }
+  inline operator char *() {
+    if (length() > 0 && *(_cur - 1) != '\0')
+      tostr();
+    return (char *)_buf;
+  }
   inline uint8_t *Bytes() { return _buf; }
-  inline const char *c_str() { return (const char *)_buf; }
+  inline const char *c_str() {
+    if (length() > 0 && *(_cur - 1) != '\0')
+      tostr();
+    return (const char *)_buf;
+  }
 
   // Clean up the Buffer and Reset it for re-use
   void flush();
@@ -134,6 +142,52 @@ public:
   size_t strfloat(float b, int8_t min_width, uint8_t num_digits_after_decimal);
   size_t strdouble(double b, int8_t min_width,
                    uint8_t num_digits_after_decimal);
+
+  // This just String Terminates the Bin
+  size_t tostr();
+
+  // Print Hex value to the String
+
+  size_t Hex(uint8_t data);
+  size_t Hex(char data);
+  size_t Hex(uint16_t data);
+  size_t Hex(int16_t data);
+  size_t Hex(uint32_t data);
+  size_t Hex(int32_t data);
+  size_t Hex(uint64_t data);
+  size_t Hex(int64_t data);
+  size_t Hex(bool data);
+  size_t Hex(float data);
+  size_t Hex(double data);
+  template <class T> inline size_t Hex(T *arg) {
+    // Print the Memory Address
+    return Hex((uint64_t)arg);
+  }
+
+  // Print a Hex Buffer
+  template <class T> inline size_t HexBuffer(T *arg, size_t size) {
+    size_t ret = 0;
+    if (size == 0) {
+      return write(F("Empty!"));
+    }
+    for (size_t i = 0; i < size; i++) {
+      ret += Hex(arg[i]);
+    }
+    return ret;
+  }
+
+  // Print a Hex Buffer like C Array
+  template <class T> inline size_t HexArray(T *arg, size_t size) {
+    size_t ret = 0;
+    for (size_t i = 0; i < size; i++) {
+      ret += write(F(" 0x"));
+      ret += Hex(arg[i]);
+      if (i < (size - 1)) {
+        ret += write(',');
+      }
+    }
+    return ret;
+  }
 };
 
 #endif /* bosejis_Bin_h */
