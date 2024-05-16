@@ -9,6 +9,7 @@ Bin	KEYWORD1
 begin	KEYWORD2
 capacity	KEYWORD2
 length	KEYWORD2
+write	KEYWORD2
 
 # Structures, Pre-Processor and Other Functions (KEYWORD3)
 
