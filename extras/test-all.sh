@@ -55,6 +55,14 @@ echo "-------------------------------------------------------------------------"
 arduino-cli compile -v --fqbn rp2040:rp2040:rpipico examples/basic_use
 echo
 echo "-------------------------------------------------------------------------"
+# Compile for Nordic nRF51X22 Development Kit(PCA1000X)
+arduino-cli compile -v --fqbn sandeepmistry:nRF5:PCA1000X examples/basic_use
+echo
+echo "-------------------------------------------------------------------------"
+# Compile for Nordic Semiconductor nRF52 DK
+arduino-cli compile -v --fqbn sandeepmistry:nRF5:nRF52DK examples/basic_use
+echo
+echo "-------------------------------------------------------------------------"
 # Compile for Arduino Uno
 arduino-cli compile -v --fqbn arduino:avr:uno examples/basic_use
 echo

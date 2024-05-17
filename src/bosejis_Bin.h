@@ -44,14 +44,8 @@ using namespace arduino;
 #include <WString.h>
 #endif
 
-#if defined(__AVR__) || defined(ARDUINO_ARCH_SAMD) ||                          \
-    defined(ARDUINO_ARCH_RP2040)
 #include <inttypes.h>
-#elif defined(ARDUINO_ARCH_ESP32) || defined(ESP8266)
 #include <stdint.h>
-#else
-#error "Unknown Architecture to Boseji's Bin Library"
-#endif
 
 #include <stdarg.h>
 #include <stddef.h>
