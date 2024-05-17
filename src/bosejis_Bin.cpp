@@ -273,16 +273,35 @@ size_t Bin::trimLeft(size_t sz) {
   memcpy(_buf, p, remain);
   // Update the Current
   _cur = _buf + remain;
-  return remain;
+  return sz;
 }
 
 size_t Bin::trimRight(size_t sz) {
   if (sz > _size || sz == 0)
     return 0;
-  if (sz > length()) {
+  if (sz >= length()) {
     size_t ret = length();
-    flush();
+    begin();
     return ret;
   }
-  return 0;
+  // Calculate the Remaining bytes after cut
+  size_t remain = length() - sz;
+  // Update the Current
+  _cur = _buf + remain;
+  return sz;
+}
+
+bool Bin::isString() {
+  if (length() > 0 && *(_cur - 1) == '\0')
+    return true;
+  return false;
+}
+
+size_t Bin::trim() {
+  if (length() == 0)
+    return 0;
+  // Delete the Last Null Character
+  if (isString())
+    --_cur;
+  return length();
 }

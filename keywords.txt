@@ -20,6 +20,10 @@ tostr	KEYWORD2
 Hex	KEYWORD2
 HexBuffer	KEYWORD2
 HexArray	KEYWORD2
+trimLeft	KEYWORD2
+trimRight	KEYWORD2
+isString	KEYWORD2
+trim	KEYWORD2
 
 # Structures, Pre-Processor and Other Functions (KEYWORD3)
 

@@ -51,6 +51,7 @@ void Test_Basic();
 void Test_Operator();
 void Test_Sprintf();
 void Test_fdprint();
+void Test_Trim();
 
 void setup() {
   Serial.begin(115200);
@@ -67,6 +68,8 @@ void loop() {
   Test_Sprintf();
   delay(2000);
   Test_fdprint();
+  delay(2000);
+  Test_Trim();
   delay(2000);
 }
 
@@ -207,8 +210,6 @@ void Test_Operator() {
   Bin b(raw, BUF_TEST_OPR);
 
   SEPARATOR("Operator Features of Bin Class");
-  Serial.println(F("\n Initial Buffer:"));
-  PrintBin(b);
 
   PrintValue("\n = uint16_t ", (uint16_t)0x1234);
   b = (uint16_t)0x1234;
@@ -229,8 +230,6 @@ void Test_Sprintf() {
   Bin b(raw, BUF_TEST_SPF);
 
   SEPARATOR("Sprintf Features of Bin Class");
-  Serial.println(F("\n Initial Buffer:"));
-  PrintBin(b);
 
   PrintValue("\n sprintf with '-6d' on uint16_t ", (uint16_t)0x1234);
   if (!b.sprintf("'%-6d'", (uint16_t)0x1234))
@@ -245,8 +244,6 @@ void Test_fdprint() {
   Bin b(raw, BUF_TEST_FD);
 
   SEPARATOR("Float and Double Print Features of Bin Class");
-  Serial.println(F("\n Initial Buffer:"));
-  PrintBin(b);
 
   PrintValueLarge("\n float (3.14159)", (float)3.14159);
   if (!b.strfloat(3.14159, 7, 5))
@@ -257,4 +254,52 @@ void Test_fdprint() {
   if (!b.strdouble(3.14159265358979, 17, 14))
     return;
   PrintBinAsString(b);
+}
+
+void Test_Trim() {
+#define BUF_TEST_TRIM 50
+  uint8_t raw[BUF_TEST_TRIM];
+  Bin b(raw, BUF_TEST_TRIM);
+
+  SEPARATOR("Trim Features of Bin Class");
+
+  do {
+    uint8_t data[5] = {0x12, 0x34, 0x56, 0x78, 0x90};
+    PrintValueArray("\n Added uint8_t* ", data, 5);
+    if (!b.write(data, 5))
+      return;
+    PrintBinNoFlush(b);
+    Serial.println(F(" Trimming 3 Bytes from the Left"));
+    if (b.trimLeft(3) != 3)
+      return;
+    PrintBin(b);
+  } while (0);
+
+  do {
+    uint8_t data[5] = {0x12, 0x34, 0x56, 0x78, 0x90};
+    PrintValueArray("\n Added uint8_t* ", data, 5);
+    if (!b.write(data, 5))
+      return;
+    PrintBinNoFlush(b);
+    Serial.println(F(" Trimming 2 Bytes from the Right"));
+    if (b.trimRight(2) != 2)
+      return;
+    PrintBin(b);
+  } while (0);
+
+  do {
+    char data[5] = {"Hari"};
+    PrintValueArray("\n char* ", data, 5);
+    if (!b.write(data, 4))
+      return;
+    PrintBinNoFlush(b);
+    Serial.print(F(" Raw Buffer as String:\n "));
+    Serial.println(b);
+    Serial.print(F(" Is String: "));
+    Serial.println(b.isString());
+    PrintBinNoFlush(b);
+    Serial.print(F(" Trim the String - "));
+    Serial.println(b.trim());
+    PrintBin(b);
+  } while (0);
 }

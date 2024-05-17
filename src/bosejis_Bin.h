@@ -87,13 +87,13 @@ public:
   // gives access to the internal string
   inline operator uint8_t *() { return _buf; }
   inline operator char *() {
-    if (length() > 0 && *(_cur - 1) != '\0')
+    if (length() > 0 && (!isString()))
       tostr();
     return reinterpret_cast<char *>(_buf);
   }
   inline uint8_t *Bytes() { return _buf; }
   inline const char *c_str() {
-    if (length() > 0 && *(_cur - 1) != '\0')
+    if (length() > 0 && (!isString()))
       tostr();
     return reinterpret_cast<const char *>(_buf);
   }
@@ -198,8 +198,10 @@ public:
   size_t trimLeft(size_t);
   // Trim few bytes from the Right Side - returns the bytes removed
   size_t trimRight(size_t);
+
   // Returns true if the Bin is indeed Null terminated
   bool isString();
+
   // Trims off the Null termination at the end
   size_t trim();
 };
