@@ -37,12 +37,11 @@
 #ifndef bosejis_Bin_h
 #define bosejis_Bin_h
 
-#if defined(__AVR__) || defined(ARDUINO_ARCH_ESP32) || defined(ESP8266) ||     \
-    defined(ARDUINO_ARCH_SAMD)
-#include <WString.h>
-#else
+#if defined(ARDUINO_ARCH_RP2040)
 #include <api/String.h>
 using namespace arduino;
+#else
+#include <WString.h>
 #endif
 
 #if defined(__AVR__) || defined(ARDUINO_ARCH_SAMD) ||                          \
