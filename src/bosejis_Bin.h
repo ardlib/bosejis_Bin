@@ -70,7 +70,10 @@ private:
 public:
   // Basic constructor requires a preallocated buffer
   Bin(uint8_t *buf, size_t size) : _buf(buf), _size(size) { begin(); }
-  Bin(char *buf, size_t size) : _buf((uint8_t *)buf), _size(size) { begin(); }
+  Bin(char *buf, size_t size)
+      : _buf(reinterpret_cast<uint8_t *>(buf)), _size(size) {
+    begin();
+  }
 
   // call this to re-use an existing Buffer without cleaning up
   void begin();
@@ -86,13 +89,13 @@ public:
   inline operator char *() {
     if (length() > 0 && *(_cur - 1) != '\0')
       tostr();
-    return (char *)_buf;
+    return reinterpret_cast<char *>(_buf);
   }
   inline uint8_t *Bytes() { return _buf; }
   inline const char *c_str() {
     if (length() > 0 && *(_cur - 1) != '\0')
       tostr();
-    return (const char *)_buf;
+    return reinterpret_cast<const char *>(_buf);
   }
 
   // Clean up the Buffer and Reset it for re-use
@@ -112,9 +115,11 @@ public:
   size_t write(int64_t);
   size_t write(float);
   size_t write(double);
-  size_t write(const char *b, bool withTermination = false);
-  size_t write(const String &s, bool withTermination = false);
-  size_t write(const __FlashStringHelper *ifsh, bool withTermination = false);
+  size_t write(uint8_t *, size_t);
+  size_t write(char *, size_t);
+  size_t write(const char *b);
+  size_t write(const String &s);
+  size_t write(const __FlashStringHelper *ifsh);
 
   // This function allows assignment to an arbitrary scalar value like
   //    str = myfloat;
@@ -161,7 +166,7 @@ public:
   size_t Hex(double data);
   template <class T> inline size_t Hex(T *arg) {
     // Print the Memory Address
-    return Hex((uint64_t)arg);
+    return Hex(reinterpret_cast<uint64_t>(arg));
   }
 
   // Print a Hex Buffer

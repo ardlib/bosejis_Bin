@@ -107,6 +107,15 @@ void loop() {
   str.HexBuffer(VAL, strlen(VAL));                                             \
   Serial.println(str)
 
+#define PrintValueArray(PRINT, ARR, SZ)                                        \
+  str.begin();                                                                 \
+  str.write(F(PRINT));                                                         \
+  str.write(F("["));                                                           \
+  str.sprintf("%d", SZ);                                                       \
+  str.write(F("] = "));                                                        \
+  str.HexArray(ARR, SZ);                                                       \
+  Serial.println(str)
+
 #define PrintBinAsString(b)                                                    \
   PrintBinNoFlush(b);                                                          \
   Serial.print(F(" Raw Buffer as String:\n "));                                \
@@ -158,6 +167,22 @@ void Test_Basic() {
   if (!b.write(true))
     return;
   PrintBin(b);
+
+  do {
+    uint8_t data[5] = {0x12, 0x34, 0x56, 0x78, 0x90};
+    PrintValueArray("\n uint8_t* ", data, 5);
+    if (!b.write(data, 5))
+      return;
+    PrintBin(b);
+  } while (0);
+
+  do {
+    char data[5] = {"Hari"};
+    PrintValueArray("\n char* ", data, 5);
+    if (!b.write(data, 4))
+      return;
+    PrintBinAsString(b);
+  } while (0);
 
   PrintValueString("\n const char* ", "Hari Aum!");
   if (!b.write("Hari Aum!"))

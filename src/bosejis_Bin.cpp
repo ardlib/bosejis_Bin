@@ -52,11 +52,11 @@ size_t Bin::write(uint8_t b) {
   return 0;
 }
 
-size_t Bin::write(char b) { return write((uint8_t)b); }
+size_t Bin::write(char b) { return write(static_cast<uint8_t>(b)); }
 
-size_t Bin::write(int8_t b) { return write((uint8_t)b); }
+size_t Bin::write(int8_t b) { return write(static_cast<uint8_t>(b)); }
 
-size_t Bin::write(bool b) { return write((uint8_t)b); }
+size_t Bin::write(bool b) { return write(static_cast<uint8_t>(b)); }
 
 size_t Bin::write(uint16_t b) {
   if ((_cur + sizeof(b)) < (_buf + _size)) {
@@ -67,7 +67,7 @@ size_t Bin::write(uint16_t b) {
   return 0;
 }
 
-size_t Bin::write(int16_t b) { return write((uint16_t)b); }
+size_t Bin::write(int16_t b) { return write(static_cast<uint16_t>(b)); }
 
 size_t Bin::write(uint32_t b) {
   if ((_cur + sizeof(b)) < (_buf + _size)) {
@@ -78,7 +78,7 @@ size_t Bin::write(uint32_t b) {
   return 0;
 }
 
-size_t Bin::write(int32_t b) { return write((uint32_t)b); }
+size_t Bin::write(int32_t b) { return write(static_cast<uint32_t>(b)); }
 
 size_t Bin::write(uint64_t b) {
   if ((_cur + sizeof(b)) < (_buf + _size)) {
@@ -89,7 +89,7 @@ size_t Bin::write(uint64_t b) {
   return 0;
 }
 
-size_t Bin::write(int64_t b) { return write((uint64_t)b); }
+size_t Bin::write(int64_t b) { return write(static_cast<uint64_t>(b)); }
 
 size_t Bin::write(float b) {
   if ((_cur + sizeof(b)) < (_buf + _size)) {
@@ -109,24 +109,31 @@ size_t Bin::write(double b) {
   return 0;
 }
 
-size_t Bin::write(const char *b, bool withTermination) {
-  if ((_cur + strlen(b)) < (_buf + _size)) {
-    memcpy(_cur, b, strlen(b));
-    _cur += strlen(b);
-    if (withTermination) {
-      *_cur = '\0';
-      _cur += 1; // For the Null Character
-    }
+size_t Bin::write(uint8_t *b, size_t sz) {
+  if ((_cur + sz) < (_buf + _size)) {
+    memcpy(_cur, b, sz);
+    _cur += sz;
     return length();
   }
   return 0;
 }
 
-size_t Bin::write(const String &s, bool withTermination) {
-  return write(s.c_str(), withTermination);
+size_t Bin::write(char *b, size_t sz) {
+  return write(reinterpret_cast<uint8_t *>(b), sz);
 }
 
-size_t Bin::write(const __FlashStringHelper *ifsh, bool withTermination) {
+size_t Bin::write(const char *b) {
+  if ((_cur + strlen(b)) < (_buf + _size)) {
+    memcpy(_cur, b, strlen(b));
+    _cur += strlen(b);
+    return length();
+  }
+  return 0;
+}
+
+size_t Bin::write(const String &s) { return write(s.c_str()); }
+
+size_t Bin::write(const __FlashStringHelper *ifsh) {
 #if defined(__AVR__)
   PGM_P p = reinterpret_cast<PGM_P>(ifsh);
   size_t n = 0;
@@ -139,20 +146,17 @@ size_t Bin::write(const __FlashStringHelper *ifsh, bool withTermination) {
     else
       break;
   }
-  if (withTermination && n > 0) {
-    write('\0');
-    ++n;
-  }
   return n;
 #else
-  return write(reinterpret_cast<const char *>(ifsh), withTermination);
+  return write(reinterpret_cast<const char *>(ifsh));
 #endif
 }
 
 size_t Bin::sprintf(const char *str, ...) {
   va_list argptr;
   va_start(argptr, str);
-  int ret = vsnprintf((char *)_cur, _size - (_cur - _buf), str, argptr);
+  int ret = vsnprintf(reinterpret_cast<char *>(_cur), _size - (_cur - _buf),
+                      str, argptr);
   if (ret) {
     while (*_cur != '\0') {
       ++_cur;
@@ -163,7 +167,7 @@ size_t Bin::sprintf(const char *str, ...) {
 
 size_t Bin::strfloat(float b, int8_t min_width,
                      uint8_t num_digits_after_decimal) {
-  return strdouble((double)b, min_width, num_digits_after_decimal);
+  return strdouble(static_cast<double>(b), min_width, num_digits_after_decimal);
 }
 
 size_t Bin::strdouble(double b, int8_t min_width,
@@ -190,7 +194,7 @@ size_t Bin::Hex(uint8_t data) {
   return ret;
 }
 
-size_t Bin::Hex(char data) { return Hex((uint8_t)data); }
+size_t Bin::Hex(char data) { return Hex(static_cast<uint8_t>(data)); }
 
 size_t Bin::Hex(uint16_t data) {
 #define U16_ARRAY_SIZE (sizeof(uint16_t))
@@ -203,7 +207,7 @@ size_t Bin::Hex(uint16_t data) {
   return ret;
 }
 
-size_t Bin::Hex(int16_t data) { return Hex((uint16_t)data); }
+size_t Bin::Hex(int16_t data) { return Hex(static_cast<uint16_t>(data)); }
 
 size_t Bin::Hex(uint32_t data) {
 #define U32_ARRAY_SIZE (sizeof(uint32_t))
@@ -216,7 +220,7 @@ size_t Bin::Hex(uint32_t data) {
   return ret;
 }
 
-size_t Bin::Hex(int32_t data) { return Hex((uint32_t)data); }
+size_t Bin::Hex(int32_t data) { return Hex(static_cast<uint32_t>(data)); }
 
 size_t Bin::Hex(uint64_t data) {
 #define U64_ARRAY_SIZE (sizeof(uint64_t))
@@ -229,9 +233,9 @@ size_t Bin::Hex(uint64_t data) {
   return ret;
 }
 
-size_t Bin::Hex(int64_t data) { return Hex((uint64_t)data); }
+size_t Bin::Hex(int64_t data) { return Hex(static_cast<uint64_t>(data)); }
 
-size_t Bin::Hex(bool data) { return Hex((uint8_t)data); }
+size_t Bin::Hex(bool data) { return Hex(static_cast<uint8_t>(data)); }
 
 size_t Bin::Hex(float data) {
 #define FLOAT_ARRAY_SIZE (sizeof(float))
