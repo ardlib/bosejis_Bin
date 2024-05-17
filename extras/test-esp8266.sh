@@ -2,7 +2,7 @@
 
 set -e
 
-# test-qtpy-m0.sh - Flash Example to Adafruit QT Py M0 (SAMD21)
+# test-esp8266.sh - Flash Example to LOLIN(WEMOS) D1 R2 & mini
 #
 # बोसजी की द्विवर्ण आधारित लाइब्रेरी
 # ===============================
@@ -38,8 +38,8 @@ set -e
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 arduino-cli cache clean
-# Compile for Adafruit QT Py M0 (SAMD21)
-arduino-cli compile -v --fqbn adafruit:samd:adafruit_qtpy_m0 examples/basic_use
+# Compile for LOLIN(WEMOS) D1 R2 & mini
+arduino-cli compile -v --fqbn esp8266:esp8266:d1_mini examples/basic_use
 # Flashing
-arduino-cli upload -p /dev/ttyACM1 -v --fqbn adafruit:samd:adafruit_qtpy_m0 \
-	examples/basic_use
+arduino-cli upload -p /dev/ttyUSB0 -v --fqbn esp8266:esp8266:d1_mini \
+    examples/basic_use

@@ -2,7 +2,7 @@
 
 set -e
 
-# test-qtpy-m0.sh - Flash Example to Adafruit QT Py M0 (SAMD21)
+# test-all.sh - Compile for All platforms
 #
 # बोसजी की द्विवर्ण आधारित लाइब्रेरी
 # ===============================
@@ -37,9 +37,27 @@ set -e
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-arduino-cli cache clean
+echo
+echo "-------------------------------------------------------------------------"
+# Compile for ESP32 (DOIT DEV KIT V1)
+arduino-cli compile -v --fqbn esp32:esp32:esp32doit-devkit-v1 examples/basic_use
+echo
+echo "-------------------------------------------------------------------------"
+# Compile for LOLIN(WEMOS) D1 R2 & mini
+arduino-cli compile -v --fqbn esp8266:esp8266:d1_mini examples/basic_use
+echo
+echo "-------------------------------------------------------------------------"
 # Compile for Adafruit QT Py M0 (SAMD21)
 arduino-cli compile -v --fqbn adafruit:samd:adafruit_qtpy_m0 examples/basic_use
-# Flashing
-arduino-cli upload -p /dev/ttyACM1 -v --fqbn adafruit:samd:adafruit_qtpy_m0 \
-	examples/basic_use
+echo
+echo "-------------------------------------------------------------------------"
+# Compile for Raspberry Pi Pico
+arduino-cli compile -v --fqbn rp2040:rp2040:rpipico examples/basic_use
+echo
+echo "-------------------------------------------------------------------------"
+# Compile for Arduino Uno
+arduino-cli compile -v --fqbn arduino:avr:uno examples/basic_use
+echo
+echo "-------------------------------------------------------------------------"
+
+arduino-cli cache clean

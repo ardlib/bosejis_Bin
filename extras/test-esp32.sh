@@ -2,7 +2,7 @@
 
 set -e
 
-# test-uno.sh - Flash Example to Arduino Uno
+# test-esp32.sh - Flash Example to ESP32 (DOIT DEV KIT V1)
 #
 # बोसजी की द्विवर्ण आधारित लाइब्रेरी
 # ===============================

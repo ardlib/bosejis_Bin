@@ -37,7 +37,14 @@
 #ifndef bosejis_Bin_h
 #define bosejis_Bin_h
 
+#if defined(__AVR__) || defined(ARDUINO_ARCH_ESP32) || defined(ESP8266) ||     \
+    defined(ARDUINO_ARCH_SAMD)
 #include <WString.h>
+#else
+#include <api/String.h>
+using namespace arduino;
+#endif
+
 #if defined(__AVR__) || defined(ARDUINO_ARCH_SAMD) ||                          \
     defined(ARDUINO_ARCH_RP2040)
 #include <inttypes.h>
@@ -193,6 +200,15 @@ public:
     }
     return ret;
   }
+
+  // Trim few bytes from the Left Side - returns the bytes removed
+  size_t trimLeft(size_t);
+  // Trim few bytes from the Right Side - returns the bytes removed
+  size_t trimRight(size_t);
+  // Returns true if the Bin is indeed Null terminated
+  bool isString();
+  // Trims off the Null termination at the end
+  size_t trim();
 };
 
 #endif /* bosejis_Bin_h */

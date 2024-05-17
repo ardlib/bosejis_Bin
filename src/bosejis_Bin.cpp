@@ -258,3 +258,31 @@ size_t Bin::Hex(double data) {
   }
   return ret;
 }
+
+size_t Bin::trimLeft(size_t sz) {
+  if (sz > _size || sz == 0)
+    return 0;
+  if (sz >= length()) {
+    size_t ret = length();
+    begin();
+    return ret;
+  }
+  // Calculate the Remaining bytes after cut and Point
+  size_t remain = length() - sz;
+  uint8_t *p = _buf + sz;
+  memcpy(_buf, p, remain);
+  // Update the Current
+  _cur = _buf + remain;
+  return remain;
+}
+
+size_t Bin::trimRight(size_t sz) {
+  if (sz > _size || sz == 0)
+    return 0;
+  if (sz > length()) {
+    size_t ret = length();
+    flush();
+    return ret;
+  }
+  return 0;
+}
