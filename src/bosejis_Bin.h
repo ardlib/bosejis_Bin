@@ -202,7 +202,7 @@ public:
   // Returns true if the Bin is indeed Null terminated
   bool isString();
 
-  // Trims off the Null termination at the end
+  // Trims off the Null termination at the end - Return the New size
   size_t trim();
 };
 
