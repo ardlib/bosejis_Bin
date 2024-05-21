@@ -52,6 +52,7 @@ void Test_Operator();
 void Test_Sprintf();
 void Test_fdprint();
 void Test_Trim();
+void Test_Read();
 
 void setup() {
   Serial.begin(115200);
@@ -70,6 +71,8 @@ void loop() {
   Test_fdprint();
   delay(2000);
   Test_Trim();
+  delay(2000);
+  Test_Read();
   delay(2000);
 }
 
@@ -300,6 +303,131 @@ void Test_Trim() {
     PrintBinNoFlush(b);
     Serial.print(F(" Trim the String - "));
     Serial.println(b.trim());
+    PrintBin(b);
+  } while (0);
+}
+
+void Test_Read() {
+#define BUF_TEST_READ 50
+  uint8_t raw[BUF_TEST_READ];
+  Bin b(raw, BUF_TEST_READ);
+
+  SEPARATOR("Read Features of Bin Class");
+
+  do {
+    uint8_t data = 0;
+    Serial.println(F("\n Writing (uint8_t)0x21 to Bin"));
+    if (!b.write((uint8_t)0x21))
+      return;
+    PrintBinNoFlush(b);
+    if (!b.read(&data))
+      return;
+    PrintValue(" Read Back: ", data);
+    PrintBin(b);
+  } while (0);
+
+  do {
+    char data = 0;
+    Serial.println(F("\n Writing (char)'P' to Bin"));
+    if (!b.write((char)'P'))
+      return;
+    PrintBinNoFlush(b);
+    if (!b.read(&data))
+      return;
+    PrintValue(" Read Back: ", data);
+    Serial.print(F(" Value in Char: "));
+    Serial.println(data);
+    PrintBin(b);
+  } while (0);
+
+  do {
+    int16_t data = 0;
+    Serial.println(F("\n Writing (int16_t)-1234 to Bin"));
+    if (!b.write((int16_t)-1234))
+      return;
+    PrintBinNoFlush(b);
+    if (!b.read(&data))
+      return;
+    PrintValue(" Read Back: ", data);
+    PrintBin(b);
+  } while (0);
+
+  do {
+    int32_t data = 0;
+    Serial.println(F("\n Writing (int32_t)-1234567890 to Bin"));
+    if (!b.write((int32_t)-1234567890))
+      return;
+    PrintBinNoFlush(b);
+    if (!b.read(&data))
+      return;
+    PrintValue(" Read Back: ", data);
+    PrintBin(b);
+  } while (0);
+
+  do {
+    int64_t data = 0;
+    Serial.println(F("\n Writing (int64_t)-1234567890123456789 to Bin"));
+    if (!b.write((int64_t)-1234567890123456789))
+      return;
+    PrintBinNoFlush(b);
+    if (!b.read(&data))
+      return;
+    PrintValueLarge(" Read Back: ", data);
+    Serial.print(F(" Actual Value: "));
+    Serial.println(data);
+    PrintBin(b);
+  } while (0);
+
+  do {
+    float data = 0;
+    Serial.println(F("\n Writing (float)3.14159 to Bin"));
+    if (!b.write((float)3.14159))
+      return;
+    PrintBinNoFlush(b);
+    if (!b.read(&data))
+      return;
+    Serial.print(F(" Actual Value: "));
+    Serial.println(data, 7);
+    PrintBin(b);
+  } while (0);
+
+  do {
+    double data = 0;
+    Serial.println(F("\n Writing (double)3.14159265358979 to Bin"));
+    if (!b.write((double)3.14159265358979))
+      return;
+    PrintBinNoFlush(b);
+    if (!b.read(&data))
+      return;
+    str.begin();
+    str.write(F(" Actual Value: "));
+    str.strdouble(data, 17, 14);
+    Serial.println(str);
+    PrintBin(b);
+  } while (0);
+
+  do {
+    uint8_t dataIn[5] = {0x12, 0x34, 0x56, 0x78, 0x90};
+    uint8_t dataOut[5];
+    PrintValueArray("\n Added uint8_t[5] ", dataIn, 5);
+    if (!b.write(dataIn, 5))
+      return;
+    PrintBinNoFlush(b);
+    if (!b.read(dataOut, 5))
+      return;
+    PrintValueArray(" Data Read Back: ", dataOut, 5);
+    PrintBin(b);
+  } while (0);
+
+  do {
+    char data[6];
+    Serial.println(F("\n Writing (String)'Hari' to Bin"));
+    if (!b.write("Hari"))
+      return;
+    PrintBinNoFlush(b);
+    if (!b.read(data, strlen("Hari") + 1))
+      return;
+    PrintValueString(" Read Back: ", data);
     PrintBin(b);
   } while (0);
 }

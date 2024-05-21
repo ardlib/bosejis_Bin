@@ -41,5 +41,5 @@ arduino-cli cache clean
 # Compile for Raspberry Pi Pico
 arduino-cli compile -v --fqbn rp2040:rp2040:rpipico examples/basic_use
 # Flashing
-arduino-cli upload -p /dev/ttyUSB0 -v --fqbn rp2040:rp2040:rpipico \
+arduino-cli upload -p /dev/ttyACM1 -v --fqbn rp2040:rp2040:rpipico \
     examples/basic_use

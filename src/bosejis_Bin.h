@@ -204,6 +204,24 @@ public:
 
   // Trims off the Null termination at the end - Return the New size
   size_t trim();
+
+  // Read functions to Decode the Stored values - Returns size of value read
+  // in bytes.
+
+  size_t read(uint8_t *); // One byte Read not the Whole array.
+  size_t read(char *);
+  size_t read(int8_t *);
+  size_t read(bool *);
+  size_t read(uint16_t *);
+  size_t read(int16_t *);
+  size_t read(uint32_t *);
+  size_t read(int32_t *);
+  size_t read(uint64_t *);
+  size_t read(int64_t *);
+  size_t read(float *);
+  size_t read(double *);
+  size_t read(uint8_t *, size_t); // Here the size is minimum possible
+  size_t read(char *, size_t);
 };
 
 #endif /* bosejis_Bin_h */

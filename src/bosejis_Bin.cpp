@@ -305,3 +305,96 @@ size_t Bin::trim() {
     --_cur;
   return length();
 }
+
+size_t Bin::read(uint8_t *p) {
+  if (length() < sizeof(*p))
+    return 0;
+  // Move the Pointer
+  _cur -= sizeof(*p);
+  // Copy data
+  memcpy(p, _cur, sizeof(*p));
+  return sizeof(*p);
+}
+
+size_t Bin::read(char *p) { return read(reinterpret_cast<uint8_t *>(p)); }
+
+size_t Bin::read(int8_t *p) { return read(reinterpret_cast<uint8_t *>(p)); }
+
+size_t Bin::read(bool *p) { return read(reinterpret_cast<uint8_t *>(p)); }
+
+size_t Bin::read(uint16_t *p) {
+  if (length() < sizeof(*p))
+    return 0;
+  // Move the Pointer
+  _cur -= sizeof(*p);
+  // Copy data
+  memcpy(p, _cur, sizeof(*p));
+  return sizeof(*p);
+}
+
+size_t Bin::read(int16_t *p) { return read(reinterpret_cast<uint16_t *>(p)); }
+
+size_t Bin::read(uint32_t *p) {
+  if (length() < sizeof(*p))
+    return 0;
+  // Move the Pointer
+  _cur -= sizeof(*p);
+  // Copy data
+  memcpy(p, _cur, sizeof(*p));
+  return sizeof(*p);
+}
+
+size_t Bin::read(int32_t *p) { return read(reinterpret_cast<uint32_t *>(p)); }
+
+size_t Bin::read(uint64_t *p) {
+  if (length() < sizeof(*p))
+    return 0;
+  // Move the Pointer
+  _cur -= sizeof(*p);
+  // Copy data
+  memcpy(p, _cur, sizeof(*p));
+  return sizeof(*p);
+}
+
+size_t Bin::read(int64_t *p) { return read(reinterpret_cast<uint64_t *>(p)); }
+
+size_t Bin::read(float *p) {
+  if (length() < sizeof(*p))
+    return 0;
+  // Move the Pointer
+  _cur -= sizeof(*p);
+  // Copy data
+  memcpy(p, _cur, sizeof(*p));
+  return sizeof(*p);
+}
+
+size_t Bin::read(double *p) {
+  if (length() < sizeof(*p))
+    return 0;
+  // Move the Pointer
+  _cur -= sizeof(*p);
+  // Copy data
+  memcpy(p, _cur, sizeof(*p));
+  return sizeof(*p);
+}
+
+size_t Bin::read(uint8_t *p, size_t sz) {
+  if (length() < sz)
+    return 0;
+  // Move the Pointer
+  _cur -= sz;
+  // Copy data
+  memcpy(p, _cur, sz);
+  return sz;
+}
+
+size_t Bin::read(char *p, size_t sz) {
+  if (length() < (sz - 1))
+    return 0;
+  // Move the Pointer
+  _cur -= (sz - 1);
+  // Copy data
+  memcpy(p, _cur, (sz - 1));
+  p[sz - 1] = '\0'; // Null Termination and Zero Index
+  return sz;
+}
