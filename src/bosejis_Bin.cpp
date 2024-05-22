@@ -307,6 +307,8 @@ size_t Bin::trim() {
 }
 
 size_t Bin::read(uint8_t *p) {
+  if (p == NULL)
+    return 0;
   if (length() < sizeof(*p))
     return 0;
   // Move the Pointer
@@ -323,6 +325,8 @@ size_t Bin::read(int8_t *p) { return read(reinterpret_cast<uint8_t *>(p)); }
 size_t Bin::read(bool *p) { return read(reinterpret_cast<uint8_t *>(p)); }
 
 size_t Bin::read(uint16_t *p) {
+  if (p == NULL)
+    return 0;
   if (length() < sizeof(*p))
     return 0;
   // Move the Pointer
@@ -335,6 +339,8 @@ size_t Bin::read(uint16_t *p) {
 size_t Bin::read(int16_t *p) { return read(reinterpret_cast<uint16_t *>(p)); }
 
 size_t Bin::read(uint32_t *p) {
+  if (p == NULL)
+    return 0;
   if (length() < sizeof(*p))
     return 0;
   // Move the Pointer
@@ -347,6 +353,8 @@ size_t Bin::read(uint32_t *p) {
 size_t Bin::read(int32_t *p) { return read(reinterpret_cast<uint32_t *>(p)); }
 
 size_t Bin::read(uint64_t *p) {
+  if (p == NULL)
+    return 0;
   if (length() < sizeof(*p))
     return 0;
   // Move the Pointer
@@ -359,6 +367,8 @@ size_t Bin::read(uint64_t *p) {
 size_t Bin::read(int64_t *p) { return read(reinterpret_cast<uint64_t *>(p)); }
 
 size_t Bin::read(float *p) {
+  if (p == NULL)
+    return 0;
   if (length() < sizeof(*p))
     return 0;
   // Move the Pointer
@@ -369,6 +379,8 @@ size_t Bin::read(float *p) {
 }
 
 size_t Bin::read(double *p) {
+  if (p == NULL)
+    return 0;
   if (length() < sizeof(*p))
     return 0;
   // Move the Pointer
@@ -379,6 +391,8 @@ size_t Bin::read(double *p) {
 }
 
 size_t Bin::read(uint8_t *p, size_t sz) {
+  if (p == NULL || sz == 0)
+    return 0;
   if (length() < sz)
     return 0;
   // Move the Pointer
@@ -389,6 +403,8 @@ size_t Bin::read(uint8_t *p, size_t sz) {
 }
 
 size_t Bin::read(char *p, size_t sz) {
+  if (p == NULL || sz == 0)
+    return 0;
   if (length() < (sz - 1))
     return 0;
   // Move the Pointer
@@ -397,4 +413,40 @@ size_t Bin::read(char *p, size_t sz) {
   memcpy(p, _cur, (sz - 1));
   p[sz - 1] = '\0'; // Null Termination and Zero Index
   return sz;
+}
+
+size_t Bin::unHex(char *p) {
+  if (p == NULL)
+    return 0;
+  size_t len = strlen(p);
+  uint8_t b, val = 0;
+  bool lower = false;
+  if (capacity() < (len >> 1))
+    return 0;
+  // Loop through the string
+  for (size_t i = 0; i < len; i++) {
+    // Convert the Character to a Nibble
+    if (p[i] >= 'A' && p[i] <= 'F') {
+      b = p[i] - 'A' + 10;
+    } else if (p[i] >= 'a' && p[i] <= 'f') {
+      b = p[i] - 'a' + 10;
+    } else if (p[i] >= '0' && p[i] <= '9') {
+      b = p[i] - '0';
+    } else {
+      continue; // Bypass others
+    }
+    // Add Nibble
+    val |= b;
+    // Check if we are at lower nibble
+    if (lower) {
+      if (!write(val))
+        break;
+      val = 0;
+      lower = false;
+    } else {
+      lower = true;
+      val <<= 4;
+    }
+  }
+  return length();
 }

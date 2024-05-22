@@ -221,7 +221,10 @@ public:
   size_t read(float *);
   size_t read(double *);
   size_t read(uint8_t *, size_t); // Here the size is minimum possible
-  size_t read(char *, size_t);
+  size_t read(char *, size_t);    // Include 1 Extra byte for Null termination
+
+  // Decode Hex into Bin - Must be Null Terminated String
+  size_t unHex(char *);
 };
 
 #endif /* bosejis_Bin_h */

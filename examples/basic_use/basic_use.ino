@@ -53,6 +53,7 @@ void Test_Sprintf();
 void Test_fdprint();
 void Test_Trim();
 void Test_Read();
+void Test_UnHex();
 
 void setup() {
   Serial.begin(115200);
@@ -73,6 +74,8 @@ void loop() {
   Test_Trim();
   delay(2000);
   Test_Read();
+  delay(2000);
+  Test_UnHex();
   delay(2000);
 }
 
@@ -373,8 +376,8 @@ void Test_Read() {
     if (!b.read(&data))
       return;
     PrintValueLarge(" Read Back: ", data);
-    Serial.print(F(" Actual Value: "));
-    Serial.println(data);
+    // Serial.print(F(" Actual Value: "));
+    // Serial.println(data);
     PrintBin(b);
   } while (0);
 
@@ -425,9 +428,43 @@ void Test_Read() {
     if (!b.write("Hari"))
       return;
     PrintBinNoFlush(b);
+    // 1 Byte Extra for Null termination
     if (!b.read(data, strlen("Hari") + 1))
       return;
     PrintValueString(" Read Back: ", data);
     PrintBin(b);
   } while (0);
+}
+
+void Test_UnHex() {
+#define BUF_TEST_UN 50
+  uint8_t raw[BUF_TEST_UN];
+  Bin b(raw, BUF_TEST_UN);
+
+  SEPARATOR("UnHex Features of Bin Class");
+
+  PrintValueString("\n Hex Stream 1: ", "1234567890");
+  if (!b.unHex((char *)"1234567890"))
+    return;
+  PrintBin(b);
+
+  PrintValueString("\n Hex Stream 2: ", "123456789");
+  if (!b.unHex((char *)"123456789"))
+    return;
+  PrintBin(b);
+
+  PrintValueString("\n Hex Stream 3: ", "A1cfDfeD");
+  if (!b.unHex((char *)"A1cfDfeD"))
+    return;
+  PrintBin(b);
+
+  PrintValueString("\n Hex Stream 4: ", "A12-315");
+  if (!b.unHex((char *)"A12-315"))
+    return;
+  PrintBin(b);
+
+  PrintValueString("\n Hex Stream 5: ", "Bin is a good lib 5 stars.");
+  if (!b.unHex((char *)"Bin is a good lib 5 stars."))
+    return;
+  PrintBin(b);
 }
