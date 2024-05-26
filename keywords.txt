@@ -26,6 +26,7 @@ isString	KEYWORD2
 trim	KEYWORD2
 read	KEYWORD2
 unHex	KEYWORD2
+Set	KEYWORD2
 
 # Structures, Pre-Processor and Other Functions (KEYWORD3)
 

@@ -54,6 +54,7 @@ void Test_fdprint();
 void Test_Trim();
 void Test_Read();
 void Test_UnHex();
+void Test_Set();
 
 void setup() {
   Serial.begin(115200);
@@ -76,6 +77,8 @@ void loop() {
   Test_Read();
   delay(2000);
   Test_UnHex();
+  delay(2000);
+  Test_Set();
   delay(2000);
 }
 
@@ -466,5 +469,21 @@ void Test_UnHex() {
   PrintValueString("\n Hex Stream 5: ", "Bin is a good lib 5 stars.");
   if (!b.unHex((char *)"Bin is a good lib 5 stars."))
     return;
+  PrintBin(b);
+}
+
+void Test_Set() {
+#define BUF_TEST_SET1 10
+#define BUF_TEST_SET2 20
+  uint8_t raw1[BUF_TEST_SET1];
+  char raw2[BUF_TEST_SET2];
+  Bin b(raw1, BUF_TEST_SET1);
+
+  SEPARATOR("Buffer Reassignment Features of Bin Class");
+
+  Serial.println(F("\n Initial Buffer Assigned with 10 size:"));
+  PrintBin(b);
+  b.Set(raw2, BUF_TEST_SET2);
+  Serial.println(F("\n Reassigned Buffer Assigned with 20 size:"));
   PrintBin(b);
 }

@@ -450,3 +450,9 @@ size_t Bin::unHex(char *p) {
   }
   return length();
 }
+
+void Bin::Set(uint8_t *buf, size_t size) {
+  _buf = buf;
+  _size = size;
+  begin();
+}

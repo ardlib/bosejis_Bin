@@ -225,6 +225,12 @@ public:
 
   // Decode Hex into Bin - Must be Null Terminated String
   size_t unHex(char *);
+
+  // Reassign the Buffer
+  void Set(uint8_t *, size_t);
+  inline void Set(char *buf, size_t size) {
+    Set(reinterpret_cast<uint8_t *>(buf), size);
+  }
 };
 
 #endif /* bosejis_Bin_h */

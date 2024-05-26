@@ -8,6 +8,16 @@
 
 > (Easy to use Binary I/O.)
 
+- Buffer Write interface
+- Floating and Double number writing and `sprintf` to Buffer
+- Buffer reuse and Reassignment
+- Both String and Binary output interfaces
+- Explicit zeroing of Buffer
+- Hex Writer with support for Arrays and External buffers
+- Byte trimming functions support
+- Buffer RAW data read support
+- Hex Decoding support
+
 ## Installation
 
 ### Using [Zip File](https://github.com/ardlib/bosejis_Bin/archive/refs/heads/main.zip) from this repository
