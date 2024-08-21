@@ -120,6 +120,10 @@ public:
   size_t write(const char *b);
   size_t write(const String &s);
   size_t write(const __FlashStringHelper *ifsh);
+  // For Custom Type Write Feature
+  template <class T> size_t write(T arg, size_t (*fn)(T *, Bin *)) {
+    return fn(&arg, this);
+  }
 
   // This function allows assignment to an arbitrary scalar value like
   //    str = myfloat;
@@ -167,6 +171,10 @@ public:
   template <class T> inline size_t Hex(T *arg) {
     // Print the Memory Address
     return Hex(reinterpret_cast<uint64_t>(arg));
+  }
+  // For Custom Type Hex Value to String Feature
+  template <class T> size_t Hex(T arg, size_t (*fn)(T *, Bin *)) {
+    return fn(&arg, this);
   }
 
   // Print a Hex Buffer
@@ -222,7 +230,10 @@ public:
   size_t read(double *);
   size_t read(uint8_t *, size_t); // Here the size is minimum possible
   size_t read(char *, size_t);    // Include 1 Extra byte for Null termination
-
+  // For Custom Type Read Function to Decode Stored Value
+  template <class T> size_t read(T *arg, size_t (*fn)(T *, Bin *)) {
+    return fn(arg, this);
+  }
   // Decode Hex into Bin - Must be Null Terminated String
   size_t unHex(char *);
 

@@ -60,6 +60,20 @@ arduino-cli upload -p /dev/ttyUSB0 -v --fqbn arduino:avr:uno \
     examples/basic_use
 ```
 
+## ESP8266 Note
+
+This library is **Not fully supported** on **ESP8266 platform**.
+
+**WARNING!** Use it at your own risk.
+
+## Developer Note
+
+Please perform formatting before committing the code.
+
+```sh
+clang-format -i src/*.* examples/**/*.ino
+```
+
 ## License
 
 `SPDX: GPL-3.0-or-later`
